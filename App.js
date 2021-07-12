@@ -1,13 +1,20 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image} from 'react-native'
+import {Text, View, StyleSheet, Image, Button} from 'react-native'
+import image from './assets/redDiamond.png'
 
 const App = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Hello world!</Text>
       <Image 
-        source={{uri: 'https://picsum.photos/200/300'}}
+        // source={{uri: 'https://picsum.photos/200/200'}}
+        source={image}
         style={styles.image}
+      />
+      <Button 
+        color="red"
+        title="Press me"
+        onPress={() => console.log("Hello world")}
       />
     </View>
   )
