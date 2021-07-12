@@ -1,46 +1,73 @@
 import React, {useState} from 'react';
-import {Text, View, StyleSheet, Image, Button, Alert, TouchableOpacity} from 'react-native'
+import {Text, View, StyleSheet, Image, Button, Alert, TouchableOpacity} from 'react-native';
 import image from './assets/redDiamond.png';
-import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker';
+import * as Sharing from 'expo-sharing';
 
 const App = () => {
 
   const [selectedImage, setSelectedImage] = useState(null)
 
-  let openIMagePickerAsync = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
+  let openImagePickerAsync = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-    if(permissionResult.granted === false) {
-      alert('Permission to access camera is required');
+    if (permissionResult.granted === false) {
+      alert("Permission to camara roll is required");
       return;
     }
 
-    const pickerResult = await ImagePicker.launchImageLibraryAsync()
-    if(pickerResult.cancelled === true) {
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    // console.log(pickerResult)
+
+    if (pickerResult.cancelled === true) {
       return;
     }
 
-    setSelectedImage({localUri: pickerResult.uri})
+    if (Platform.OS === "web") {
+      let remoteUri = await uploadAnonymousFilesAsync(pickerResult.uri);
+      setSelectedImage({ localUri: pickerResult.uri, remoteUri });
+    } else {
+      setSelectedImage({ localUri: pickerResult.uri });
+    }
+  };
+
+  const openShareDialog = async () => {
+    if(!(await Sharing.isAvailableAsync())) {
+      alert("Sharing is not available on your platform")
+      return;
+    }
+
+    await Sharing.shareAsync(selectedImage.localUri);
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Pick an image!</Text>
+      <TouchableOpacity
+        onPress={openImagePickerAsync()} 
+      >
       <Image Pick an image={{uri: 'https://picsum.photos/200/200'}}
         source={ selectedImage !== null ? selectedImage.localUri : image}
         style={styles.image}
       />
+      </TouchableOpacity>
       {/* <Button 
         color="red"
         title="Press me"
         onPress={() => Alert.alert('Hello world')}
       /> */}
-      <TouchableOpacity
-        onPress={() => openIMagePickerAsync()}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText} >Press Me</Text>
-      </TouchableOpacity>
+      {
+        selectedImage ? (
+        <TouchableOpacity
+          onPress={() => openShareDialog()}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Share this image</Text>
+        </TouchableOpacity>
+        ) : (
+          <View />
+        )
+      }
 
     </View>
   )
