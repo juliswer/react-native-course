@@ -3,6 +3,7 @@ import {Text, View, StyleSheet, Image, Button, Alert, TouchableOpacity} from 're
 import image from './assets/redDiamond.png';
 import * as ImagePicker from 'expo-image-picker';
 import * as Sharing from 'expo-sharing';
+import uploadToAnonymousFilesAsync  from 'anonymous-files'
 
 const App = () => {
 
@@ -33,7 +34,7 @@ const App = () => {
 
   const openShareDialog = async () => {
     if(!(await Sharing.isAvailableAsync())) {
-      alert("Sharing is not available on your platform")
+      alert(`The image is available for sharing at: ${selectedImage.remoteUri} `)
       return;
     }
 
