@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, Button} from 'react-native'
+import {Text, View, StyleSheet, Image, Button, Alert, TouchableOpacity} from 'react-native'
 import image from './assets/redDiamond.png'
 
 const App = () => {
@@ -11,11 +11,18 @@ const App = () => {
         source={image}
         style={styles.image}
       />
-      <Button 
+      {/* <Button 
         color="red"
         title="Press me"
-        onPress={() => console.log("Hello world")}
-      />
+        onPress={() => Alert.alert('Hello world')}
+      /> */}
+      <TouchableOpacity
+        onPress={() => Alert.alert('Hello world')}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText} >Press Me</Text>
+      </TouchableOpacity>
+
     </View>
   )
 }
@@ -34,6 +41,15 @@ const styles = StyleSheet.create({
   image: {
     height: 200,
     width: 200
+  },
+  button: {
+    backgroundColor: 'deepskyblue',
+    padding: 7,
+    marginTop: 10
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 20
   }
 })
 
