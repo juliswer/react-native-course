@@ -25,9 +25,8 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hello world!</Text>
-      <Image 
-        // source={{uri: 'https://picsum.photos/200/200'}}
+      <Text style={styles.title}>Pick an image!</Text>
+      <Image Pick an image={{uri: 'https://picsum.photos/200/200'}}
         source={ selectedImage !== null ? selectedImage.localUri : image}
         style={styles.image}
       />
